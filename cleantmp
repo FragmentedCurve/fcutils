@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+DIRS=(".")
+CLEANER=clean
+
+cleanrecursive() {
+	find ${1} -name "*~" -print0 | xargs -0 rm -vf
+	find ${1} -name "*#" -print0 | xargs -0 rm -vf
+}
+
+clean() {
+	rm -vf *~ *"#"
+}
+
+usage() {
+	echo "${0} [option] [directory] ..."
+	echo "Options:"
+	echo "  -r    Recursive"
+	echo "  -h    Display this"
+}
+
+case ${1} in
+	"-r")
+		CLEANER=cleanrecursive
+		tmp=($@)
+		DIRS=(${tmp[*]:1})
+		;;
+	"-h")
+		usage
+		exit 0
+		;;
+	*)
+		if [ -n "${1}" ]; then
+			DIRS=($@)
+		fi
+		;;
+esac
+
+for i in ${DIRS[*]}; do
+	${CLEANER} ${i}
+done
+

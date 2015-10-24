@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+
+TINYALPHA="abcdefghijklmnopqrstuvwxyz"
+BIGALPHA="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+NUMERIC="0123456789"
+SYMBOL="~!@#$%^&*()_+\`-=[]\;',./{}|:\"<>?"
+
+count=8
+alpha=""
+
+usage() {
+	echo "${0} [options]"
+	echo "Options:"
+	echo "  -n    Don't print newline"
+	echo "  -c    Length of password"
+	echo "  -a    Tiny alphabet"
+	echo "  -A    Big alphabet"
+	echo "  -N    Numeric"
+	echo "  -s    Symbols"
+	echo "  -h    Display this" 
+}
+
+args=(`getopt nc:aANsh ${*}`)
+
+if [ $? != 0 ]; then
+	usage
+	exit 1
+fi
+
+set -- ${args[*]}
+
+for arg in ${args[*]}; do
+	case ${arg} in
+		"-n")
+			NLFLAG="YES"
+			shift
+			;;
+		"-c")
+			count=${2}
+			shift
+			;;
+		"-a")
+			alpha="${alpha[*]}${TINYALPHA[*]}"
+			shift
+			;;
+		"-A")
+			alpha="${alpha[*]}${BIGALPHA[*]}"
+			shift
+			;;
+		"-N")
+			alpha="${alpha[*]}${NUMERIC[*]}"
+			shift
+			;;
+		"-s")
+			alpha="${alpha[*]}${SYMBOL[*]}"
+			shift
+			;;
+		"-h")
+			usage
+			exit 0
+			;;
+	esac
+done
+
+if [ -z "${alpha}" ]; then
+	usage
+	exit 1
+fi
+
+n=(`head -c ${count} /dev/random | hexdump -e "${count}/1 \"%u \""`)
+for i in ${n[*]}; do
+	t=`expr ${i} % ${#alpha}`
+	echo -n "${alpha:$t:1}"
+done
+
+if [ -z "${NLFLAG}" ]; then
+	echo
+fi

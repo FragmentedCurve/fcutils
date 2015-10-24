@@ -1,0 +1,16 @@
+#!/bin/bash
+
+mv_pages() {
+    for i in `find . -name '*.html@*=*'`; do mv $i $i.html; done
+}
+
+fix_links() {
+     for fl in `find . -name '*.html'`; do
+		 mv $fl $fl.old
+		 sed -r 's/index\.html@([A-Z]|[a-z])+=[0-9]+/&\.html/' $fl.old > $fl
+		 rm -f $fl.old
+     done
+}
+
+mv_pages
+fix_links

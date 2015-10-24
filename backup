@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+USER=
+SERVER=
+SERVER_DEST=
+LOCAL_DEST=~/
+DIRS=()
+
+MODE=${1}
+
+push() {
+	rsync -avz ~/${1} -e ssh --delete ${USER}@${SERVER}:${SERVER_DEST}
+}
+
+pull() {
+	rsync -avzh -e ssh --delete ${USER}@${SERVER}:${SERVER_DEST}/${1} ${LOCAL_DEST}
+}
+
+usage() {
+	echo "${0} [Mode] [Arguments for mode]"
+	echo ""
+	echo "Modes:"
+	echo "  push [directory] ..."
+	echo "  pull [directory] ..."
+	echo "  help"
+	exit 0
+}
+
+if [ -n "${2}" ]; then
+	tmp=($*)
+	DIRS=(${tmp[*]:1})
+fi
+
+if [ "${MODE}" = "push" ] || [ "${MODE}" = "pull" ]; then
+	for i in ${DIRS[*]}; do
+		${MODE} ${i}
+	done
+else
+	usage
+fi
+

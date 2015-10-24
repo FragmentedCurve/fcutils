@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+fmt='5/1 "%02X:" 1/1 "%02X\n"'
+
+usage() {
+	echo "${0} [options]"
+	echo "Options:"
+	echo "  -n    Don't print newline"
+	echo "  -h    Display this" 
+}
+
+case ${1} in
+	"-n")
+		fmt='5/1 "%02X:" 1/1 "%02X"'
+		;;
+	"-h")
+		usage
+		exit 0
+		;;
+esac
+
+head -c 6 /dev/random | hexdump -e "${fmt}"
+
