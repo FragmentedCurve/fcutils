@@ -22,19 +22,17 @@ usage() {
 case ${1} in
 	"-r")
 		CLEANER=cleanrecursive
-		tmp=($@)
-		DIRS=(${tmp[*]:1})
+		shift
 		;;
 	"-h")
 		usage
 		exit 0
 		;;
-	*)
-		if [ -n "${1}" ]; then
-			DIRS=($@)
-		fi
-		;;
 esac
+
+if [ -n "${1}" ]; then
+	DIRS=($@)
+fi
 
 for i in ${DIRS[*]}; do
 	${CLEANER} ${i}
