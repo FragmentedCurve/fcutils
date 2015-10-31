@@ -5,11 +5,11 @@ CLEANER=clean
 
 cleanrecursive() {
 	find ${1} -name "*~" -print0 | xargs -0 rm -vf
-	find ${1} -name "*#" -print0 | xargs -0 rm -vf
+	find ${1} -name "#*#" -print0 | xargs -0 rm -vf
 }
 
 clean() {
-	rm -vf *~ *"#"
+	rm -vf *~ "#"*"#"
 }
 
 usage() {
