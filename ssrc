@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+function do_search() {
+	find "${2}" -type f -exec /usr/bin/grep --with-filename --line-number "${1}" '{}' ';'
+}
+
+src_string="${1}"
+
+shift
+for dir in $*; do
+	if ! [ -e "${dir}" ]; then
+		echo "Path doesn't exist: ${dir}"
+		exit 1
+	fi
+
+	if [ -d "${dir}" -o -f "${dir}" ]; then
+		do_search "${src_string}" "${dir}"
+	else
+		echo "Path isn't a directory or regular file: ${dir}"
+		exit 1
+	fi
+done
+
+exit 0
