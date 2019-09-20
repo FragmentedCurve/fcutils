@@ -1,0 +1,16 @@
+=== fcutils ===
+
+This is an eclectic collection of scripts.
+
+=== Descriptions ===
+
+  randmac    Generate a random MAC.
+  randpass   Random password generator (depends on /dev/random).
+  ssrc       I use this within the programming editor acme a lot to grep through source code. 
+  cleantmp   Remove recovery files left behind by editors such as vi and emacs. 
+  backup     A wrapper for rsync.
+  fixmirror  Makes mirrors of websites downloaded with wget work.
+
+=== Author(s) ===
+
+Paco Pascal
